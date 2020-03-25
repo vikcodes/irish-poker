@@ -1,0 +1,52 @@
+<template>
+    <div class="center">
+    <div class="row">
+        <template class="card-container" for:each={rowFour} for:item="card">
+            <div class="card" key={card.id}>
+                <div class="side">
+                    Front
+                </div>
+                <div class="side back">
+                {card.value}
+                </div>
+            </div>
+        </template>
+    </div>
+    <div class="row">
+        <template class="card-container" for:each={rowThree} for:item="card">
+            <div class="card" key={card.id}>
+                <div class="side">
+                    Front
+                </div>
+                <div class="side back">
+                {card.value}
+                </div>
+            </div>
+        </template>
+    </div>
+    <div class="row">
+        <template class="card-container" for:each={rowTwo} for:item="card">
+            <div class="card" key={card.id}>
+                <div class="side">
+                    Front
+                </div>
+                <div class="side back">
+                {card.value}
+                </div>
+            </div>
+        </template>
+    </div>
+    <div class="row">
+        <template class="card-container" for:each={rowOne} for:item="card">
+            <div class="card" key={card.id}>
+                <div class="side">
+                    Front
+                </div>
+                <div class="side back">
+                {card.value}
+                </div>
+            </div>
+        </template>
+    </div>
+</div>
+</template>

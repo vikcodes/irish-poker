@@ -1,0 +1,37 @@
+.card-container {
+    cursor: pointer;
+    position: relative;
+    height: 5rem;
+    width: 5rem;
+  }
+  .card {
+    height: 5rem;
+    width: 5rem;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+    padding: 1rem;
+  }
+  .card:active {
+    transform: rotateY(180deg);
+  }
+  .card .side {
+    height: 5rem;
+    width: 5rem;
+    backface-visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    border: solid darkgray;
+
+  }
+  .card .back {
+    background: #eaeaed;
+    color: #0087cc;
+    text-align: center;
+    transform: rotateY(180deg);
+  }
+
+  .row {
+      display: flex;
+      justify-content: center;
+  }
