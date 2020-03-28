@@ -1,7 +1,11 @@
 <template>
     <!-- Page code -->
     <div class="center">
-        <div class="container">
+        <div class="container" if:false={isSignedOn}>
+            <my-sign-on onsignon={handleSignOn}></my-sign-on>
+        </div>
+
+        <div class="container" if:true={isSignedOn}>
             <my-deck onstart={handleStart}></my-deck>
             <my-pyramid  if:true={rowFour} row-one={rowOne} row-two={rowTwo} row-three={rowThree} row-four={rowFour}></my-pyramid>
             <div class="players">

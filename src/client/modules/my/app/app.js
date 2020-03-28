@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import firebase from '../firebase/firebase.js';
 
 export default class App extends LightningElement {
     @api rowOne;
@@ -8,6 +9,8 @@ export default class App extends LightningElement {
 
     @api playerOneHand;
     @api playerTwoHand;
+
+    isSignedOn = false;
 
     handleStart(event) {
         console.log('pyramid: ' + event.target.pyramid);
@@ -19,6 +22,21 @@ export default class App extends LightningElement {
         this.playerOneHand = event.target.playerHands[0];
         this.playerTwoHand = event.target.playerHands[1];
         //console.log(this.playerTwoHand);
+    }
+
+    handleSignOn() {
+        this.isSignedOn = true;
+    }
+
+    connectedCallback() {
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          // User is signed in.
+          console.log('user, ', user);
+        } else {
+          // No user is signed in.
+        }
+      });
     }
 
 }

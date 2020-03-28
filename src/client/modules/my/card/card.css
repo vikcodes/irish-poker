@@ -5,7 +5,6 @@
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.8s;
-    padding: 1rem;
   }
 
 .card .side {
@@ -17,7 +16,7 @@
     border: solid darkgray;
 
   }
-  
+
   .card .back {
     background: #eaeaed;
     color: #0087cc;

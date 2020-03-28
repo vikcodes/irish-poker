@@ -1,0 +1,24 @@
+<template>
+    <h1>Welcome to Irish Poker!</h1>
+
+    <div class="slds-form">
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="username">
+              <abbr class="slds-required" title="required">* </abbr>Create a Game Room Name: </label>
+            <div class="slds-form-element__control">
+              <input type="text" id="username" placeholder="Placeholder Text" required="" aria-describedby="username-error" aria-invalid="true" />
+            </div>
+            <div class="slds-form-element__help" id="username-error" if:true={emptyUsername}>This field is required</div>
+        </div>
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="password">
+              <abbr class="slds-required" title="required">* </abbr>Create a Game Room Password for Friends to Join: </label>
+            <div class="slds-form-element__control">
+              <input type="text" id="password" placeholder="Placeholder Text" required="" aria-describedby="password-error" aria-invalid="true" />
+            </div>
+            <div class="slds-form-element__help" id="password-error" if:true={emptyPassword}>This field is required</div>
+        </div>
+    </br>
+        <button class="slds-button slds-button_neutral" onclick={signOn}>Sign On</button>
+    </div>
+</template>
