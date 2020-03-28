@@ -1,5 +1,5 @@
 
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api} from 'lwc';
 import './pyramid.css';
 
 export default class Pyramid extends LightningElement {

@@ -5,6 +5,7 @@ import './deck.css';
 export default class Deck extends LightningElement {
     @track deck = [];
     @api pyramid = [];
+    @api playerHands = [];
 
     newDeck() {
         this.deck = [];
@@ -27,6 +28,19 @@ export default class Deck extends LightningElement {
         }
     }
 
+    setPlayersHands() {
+        let players = 2;
+        let numOfCards = 5;
+
+        for (let i = 0; i < players; i++) {
+            this.playerHands[i] = [];
+            for (let j = 0; j < numOfCards; j++) {
+                this.playerHands[i].push({order:j, value:this.deck.pop()});
+            }  
+        }
+        console.log('playerHands: ', this.playerHands);
+    }
+
     createPyramid() {
         this.newDeck();
         let height = 3;
@@ -37,6 +51,8 @@ export default class Deck extends LightningElement {
             }
         }
         console.log(this.pyramid);
+
+        this.setPlayersHands();
             
         document.cookie = "gameid=" + Math.random().toString(36).substring(7); //unique game id, should replace with better random generator
 
