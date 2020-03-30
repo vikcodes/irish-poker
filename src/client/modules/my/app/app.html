@@ -4,13 +4,15 @@
         <div class="container" if:false={isSignedOn}>
             <my-sign-on onsignon={handleSignOn}></my-sign-on>
         </div>
-
         <div class="container" if:true={isSignedOn}>
             <my-deck onstart={handleStart}></my-deck>
+            <div class="container" if:true={isWaiting}>
+                <my-waiting-page username={username}></my-waiting-page>
+            </div>
             <my-pyramid  if:true={rowFour} row-one={rowOne} row-two={rowTwo} row-three={rowThree} row-four={rowFour}></my-pyramid>
             <div class="players">
-                <my-players if:true={playerOneHand} player-hand={playerOneHand}></my-players>
-                <my-players if:true={playerTwoHand} player-hand={playerTwoHand}></my-players>
+                <my-players if:true={playerOneHand} player-hand={playerOneHand} player-name={playerName1}></my-players>
+                <my-players if:true={playerTwoHand} player-hand={playerTwoHand} player-name={playerName2}></my-players>
             </div>
         </div>
     </div>

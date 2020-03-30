@@ -4,4 +4,5 @@ import './players.css';
 
 export default class Players extends LightningElement {
     @api playerHand;
+    @api playerName;
 }

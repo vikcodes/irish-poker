@@ -1,6 +1,7 @@
 
 import { LightningElement, track, api} from 'lwc';
 import './deck.css';
+import firebase from '../firebase/firebase.js';
 
 export default class Deck extends LightningElement {
     @track deck = [];
@@ -43,10 +44,10 @@ export default class Deck extends LightningElement {
 
     createPyramid() {
         this.newDeck();
-        let height = 3;
-        for (let i = height; i>=0; i--) {
+        let height = 4;
+        for (let i = 0; i < height; i++) {
             this.pyramid[i] = [];
-            for (let j = i; j>=0; j--) {
+            for (let j = 0; j<=i; j++) {
                 this.pyramid[i].push({id:j, value:this.deck.pop()});
             }
         }
@@ -57,6 +58,14 @@ export default class Deck extends LightningElement {
         document.cookie = "gameid=" + Math.random().toString(36).substring(7); //unique game id, should replace with better random generator
 
         this.dispatchEvent(new CustomEvent('start'));
+    }
+
+    endGame() {
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+          }).catch(function(error) {
+            // An error happened.
+          });
     }
 
 
