@@ -2,6 +2,7 @@
 import { LightningElement, track, api} from 'lwc';
 import './deck.css';
 import firebase from '../firebase/firebase.js';
+import {updatePyramid, retrieveGameId, retrievePlayers, updatePlayerHand, beginGame} from '../util/util.js';
 
 export default class Deck extends LightningElement {
     @track deck = [];
@@ -10,54 +11,66 @@ export default class Deck extends LightningElement {
 
     newDeck() {
         this.deck = [];
-
         const suits = ['H', 'S', 'C', 'D'];
         const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
+        //create basic deck of cards
         for (let suit in suits) {
             for (let value in values) {
                 this.deck.push(`${values[value]}${suits[suit]}`);
             }
         }
 
+        //randomize the deck
         let m = this.deck.length, i;
-
         while (m) {
             i = Math.floor(Math.random() * m--);
-
             [this.deck[m], this.deck[i]] = [this.deck[i], this.deck[m]];
         }
     }
 
     setPlayersHands() {
-        let players = 2;
         let numOfCards = 5;
+        let gameid = retrieveGameId();
+        new Promise((resolve) => {
+            retrievePlayers(gameid, resolve = (players) => {
+                //console.log(players);
+                for (let i = 0; i < players.length; i++) {
+                    let hand = {};
+                    let index = i*5;
+                    for (let j = 0; j < numOfCards; j++) {
+                        hand[this.deck[index+j]] = {
+                            'order': j,
+                            'flipped': false
+                        };
+                    }
+                    updatePlayerHand(players[i], hand, gameid);
+                }
+            });
+        })
+        .catch(error => console.log('Error retrieving list of players to add cards: ' + error));
 
-        for (let i = 0; i < players; i++) {
-            this.playerHands[i] = [];
-            for (let j = 0; j < numOfCards; j++) {
-                this.playerHands[i].push({order:j, value:this.deck.pop()});
-            }  
-        }
-        console.log('playerHands: ', this.playerHands);
     }
 
     createPyramid() {
         this.newDeck();
         let height = 4;
+        let pyramidMap = {};
         for (let i = 0; i < height; i++) {
-            this.pyramid[i] = [];
-            for (let j = 0; j<=i; j++) {
-                this.pyramid[i].push({id:j, value:this.deck.pop()});
+            for (let j = 0; j <= i; j++) {
+                pyramidMap[this.deck.pop()] = {
+                    'order': j,
+                    'row': i,
+                    'flipped': false
+                };
             }
         }
-        //console.log(this.pyramid);
-
+        updatePyramid(pyramidMap, retrieveGameId());
         this.setPlayersHands();
             
-        //document.cookie = "gameid=" + Math.random().toString(36).substring(7); //unique game id, should replace with better random generator
+        beginGame(retrieveGameId());
 
-        this.dispatchEvent(new CustomEvent('start'));
+        //this.dispatchEvent(new CustomEvent('start'));
     }
 
     endGame() {

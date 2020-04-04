@@ -9,10 +9,10 @@ const createGame = (gamename, password, username) => {
     document.cookie = "username=" + username;
     firebase.auth().createUserWithEmailAndPassword(gamename, password)
     .then(function(game) {
-        db.collection("game").doc(game.uid).set({
-            game: game.uid,
+        db.collection("game").doc(game.user.uid).set({
+            game: game.user.uid,
             begin: false
-        })
+        });
         addPlayer(username, game.user.uid);
     })
     .catch(function(error) {
@@ -24,7 +24,11 @@ const signIn = (gamename, password, username) => {
     document.cookie = "username=" + username;
     firebase.auth().signInWithEmailAndPassword(gamename, password)
     .then(function(game) {
-        addPlayer(username, game.user.uid);
+      db.collection("game").doc(game.user.uid).set({
+        game: game.user.uid,
+        begin: false
+      }, {merge: true});
+      addPlayer(username, game.user.uid);
     })
     .catch(function(error) {
         console.log("Error signing in with game id and password: ", error);
@@ -32,15 +36,14 @@ const signIn = (gamename, password, username) => {
 }
 
 const retrieveGameId = () => {
-    firebase.auth().onAuthStateChanged(function(game) {
+  let game = firebase.auth().currentUser;
         if (game) {
           // User is signed in.
-          console.log('game, ', game);
-          return game.user.uid;
+          //console.log('game, ', game);
+          return game.uid;
         } else {
             console.log('No game being played');
         }
-    });
 }
 
 //Adds a player to the map of players in the game id doc, hand is set to an empty map
@@ -58,14 +61,14 @@ const updatePlayerHand = (username, cards, gameId) => {
     let playersMap = {};
     players[username] = cards;
     playersMap['playersMap'] = players;
-    db.collection("game").doc(gameId).set(playersMap, SetOptions.merge());
+    db.collection("game").doc(gameId).set(playersMap, {merge: true});
 }
 
 //expecting pyramid to be a map of value -> {order, row, flipped}
 const updatePyramid = (pyramid, gameId) => {
     let pyramidMap = {};
     pyramidMap['pyramidMap'] = pyramid;
-    db.collection("game").doc(gameId).set(pyramidMap, SetOptions.merge());
+    db.collection("game").doc(gameId).set(pyramidMap, {merge: true});
 }
 
 //Deletes the game by deleting the game id document
@@ -79,32 +82,28 @@ const resetGame = (gameId) => {
     });
 }
 
-const retrievePyramid = (gameId) => {
-    db.collection("game").doc(gameId).get()
-    .then(doc => {
-        if (!doc.exists) {
-          console.log('No such game!');
+const retrievePyramid = (gameId, callback) => {
+    db.collection("game").doc(gameId).onSnapshot(doc => {
+        if (!doc.data().pyramidMap) {
+          console.log('No such pyramid!');
         } else {
           console.log('Pyramid data:', doc.data().pyramidMap);
-          return doc.data().pyramidMap;
+          callback(doc.data().pyramidMap);
         }
-      })
-      .catch(err => {
+      }, err => {
         console.log('Error getting game when retrieving pyramid', err);
       });
 }
 
-const retrievePlayerHand = (username, gameId) => {
-    db.collection("game").doc(gameId).get()
-    .then(doc => {
-        if (!doc.exists) {
-          console.log('No such game!');
+const retrievePlayerHand = (username, gameId, callback) => {
+    db.collection("game").doc(gameId).onSnapshot(doc => {
+        if (!doc.data().playersMap[username]) {
+          console.log('No such player hand!');
         } else {
           console.log('Player data:', doc.data().playersMap[username]);
-          return doc.data().playersMap[username];
+          callback(doc.data().playersMap[username]);
         }
-      })
-      .catch(err => {
+      }, err => {
         console.log('Error getting game when retrieving player hand', err);
       });
 }
@@ -113,9 +112,9 @@ const retrievePlayerHand = (username, gameId) => {
 const retrievePlayers = (gameId, callback) => {
     db.collection("game").doc(gameId).onSnapshot(doc => {
         if (!doc.exists) {
-          console.log('No such game!');
-        } else {
-          console.log('Player data:', Object.keys(doc.data().playersMap));
+          console.log('No such players!');
+        } else if (doc.data().playersMap){
+          //console.log('Player data:', Object.keys(doc.data().playersMap));
           callback(Object.keys(doc.data().playersMap));
         }
       }, err => {
@@ -123,4 +122,22 @@ const retrievePlayers = (gameId, callback) => {
       });
 }
 
-export {resetGame, createGame, addPlayer, updatePlayerHand, updatePyramid, retrievePyramid, retrievePlayerHand, retrievePlayers, signIn, retrieveGameId};
+const beginGame = (gameId) => {
+  let begin = {'begin': true};
+  db.collection("game").doc(gameId).set(begin, {merge: true});
+}
+
+const retrieveBeginGame = (gameId, callback) => {
+  db.collection("game").doc(gameId).onSnapshot(doc => {
+    if (!doc.exists) {
+      console.log('No such game to begin!');
+    } else {
+      console.log('Begin:', doc.data().begin);
+      callback(doc.data().begin);
+    }
+  }, err => {
+    console.log('Error getting game when retrieving begin', err);
+  });
+}
+
+export {resetGame, createGame, addPlayer, updatePlayerHand, updatePyramid, retrievePyramid, retrievePlayerHand, retrievePlayers, signIn, retrieveGameId, beginGame, retrieveBeginGame};

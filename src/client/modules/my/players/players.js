@@ -2,32 +2,27 @@
 import { LightningElement, api, track } from 'lwc';
 import './players.css';
 import firebase from '../firebase/firebase.js';
-
-const db = firebase.firestore();
+import {retrievePlayerHand, retrieveGameId} from '../util/util.js';
 
 export default class Players extends LightningElement {
     @track playerHand = [];
     @api playerName;
 
-
     connectedCallback() {
-        let name = this.playerName;
         new Promise((resolve) => {
-            resolve = (items) => {
-                this.playerHand = items;
-                console.log(items);
-            };
-            let user = firebase.auth().currentUser;
-            db.collection("game").doc(user.uid).collection("players").doc(name).collection("hand")
-                .onSnapshot(function(querySnapshot) {
-                const items = [];
-                querySnapshot.forEach(function(doc) {
-                    let card = doc.data();
-                    items.push({order : card.order, value : card.value});
-                })
-                resolve(items);
-            })
+            retrievePlayerHand(this.playerName, retrieveGameId(), resolve = (hand) => {
+                console.log('Hand: ', hand);
+                this.playerHand = []; 
+                for (const value in hand) {
+                    this.playerHand[hand[value].order] = {
+                        'order': hand[value].order,
+                        'value': value,
+                        'flipped': hand[value].flipped
+                    };
+                }
+                    //this.dispatchEvent(new CustomEvent('players'));
+            });
         })
-        .catch(error => console.log('Error: ' + error)); 
+        .catch(error => console.log('Error retrieving pyramid of cards: ' + error));
     }
 }

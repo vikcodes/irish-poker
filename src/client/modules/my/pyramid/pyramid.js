@@ -2,37 +2,48 @@
 import { LightningElement, api} from 'lwc';
 import './pyramid.css';
 import firebase from '../firebase/firebase.js';
-
-const db = firebase.firestore();
-
+import {retrievePyramid, retrieveGameId} from '../util/util.js';
 export default class Pyramid extends LightningElement {
     @api rows
 
-
     connectedCallback() {
+            // rows = {
+            //     {
+            //         id: the row Number,
+            //         row: {
+            //             order: order of the card in the row,
+            //             row: the row number,
+            //             value: the value of the card,
+            //             flipped: if the card is flipped or not
+            //         }
+            //     }
+            // }
+
             new Promise((resolve) => {
-                resolve = (items) => {
-                    this.rows = items;
-                };
-                let user = firebase.auth().currentUser;
-                db.collection("game").doc(user.uid).collection("pyramid")
-                    .onSnapshot(function(querySnapshot) {
-                    let items = [];
-                    querySnapshot.forEach(function(doc) {
-                        let card= doc.data();
-                        if (items.hasOwnProperty(card.row)) {
-                            items[card.row].row.push(card);
+                retrievePyramid(retrieveGameId(), resolve = (pyramid) => {
+                    console.log('Pyramid: ', pyramid);
+                    this.rows = [{}, {}, {}, {}]; //need to change this later to be referenced from pyramid height
+                    for (const value in pyramid) {
+                        if (this.rows[pyramid[value].row].row === undefined) {
+                            this.rows[pyramid[value].row].id = pyramid[value].row;
+                            this.rows[pyramid[value].row].row = [{
+                                'order': pyramid[value].order,
+                                'row': pyramid[value].row,
+                                'value': value,
+                                'flipped': pyramid[value].flipped
+                            }]
                         } else {
-                            items[card.row] = {};
-                            items[card.row].id = card.row;
-                            items[card.row].row = [];
-                            items[card.row].row.push(card);
-                            //bad code will fix later
+                            this.rows[pyramid[value].row].row.push({
+                                'order': pyramid[value].order,
+                                'row': pyramid[value].row,
+                                'value': value,
+                                'flipped': pyramid[value].flipped
+                            })
                         }
-                    })
-                    resolve(items);
-                })
+                    }
+                        //this.dispatchEvent(new CustomEvent('players'));
+                });
             })
-            .catch(error => console.log('Error: ' + error)); 
+            .catch(error => console.log('Error retrieving pyramid of cards: ' + error)); 
         }
 }
