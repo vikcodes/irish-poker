@@ -7,12 +7,12 @@
         <div class="container" if:true={isSignedOn}>
             <my-deck onstart={handleStart}></my-deck>
             <div class="container" if:true={isWaiting}>
-                <my-waiting-page username={username}></my-waiting-page>
+                <my-waiting-page username={username} onplayers={handlePlayers}></my-waiting-page>
             </div>
-            <my-pyramid  if:true={rowFour} row-one={rowOne} row-two={rowTwo} row-three={rowThree} row-four={rowFour}></my-pyramid>
+            <my-pyramid  if:true={isStart}></my-pyramid>
             <div class="players">
-                <my-players if:true={playerOneHand} player-hand={playerOneHand} player-name={playerName1}></my-players>
-                <my-players if:true={playerTwoHand} player-hand={playerTwoHand} player-name={playerName2}></my-players>
+                <my-players if:true={isStart} player-name={playerName1}></my-players>
+                <my-players if:true={isStart} player-name={playerName2}></my-players>
             </div>
         </div>
     </div>

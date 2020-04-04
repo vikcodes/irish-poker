@@ -51,11 +51,11 @@ export default class Deck extends LightningElement {
                 this.pyramid[i].push({id:j, value:this.deck.pop()});
             }
         }
-        console.log(this.pyramid);
+        //console.log(this.pyramid);
 
         this.setPlayersHands();
             
-        document.cookie = "gameid=" + Math.random().toString(36).substring(7); //unique game id, should replace with better random generator
+        //document.cookie = "gameid=" + Math.random().toString(36).substring(7); //unique game id, should replace with better random generator
 
         this.dispatchEvent(new CustomEvent('start'));
     }
@@ -63,8 +63,10 @@ export default class Deck extends LightningElement {
     endGame() {
         firebase.auth().signOut().then(function() {
             // Sign-out successful.
+            console.log('Signed out');
           }).catch(function(error) {
             // An error happened.
+            console.log('no sign out',  error);
           });
     }
 

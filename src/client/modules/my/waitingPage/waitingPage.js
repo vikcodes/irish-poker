@@ -1,52 +1,28 @@
 
 import { LightningElement, api, track} from 'lwc';
 import './waitingPage.css';
+import {retrievePlayers} from '../util/util.js';
 import firebase from '../firebase/firebase.js';
 
-const db = firebase.firestore();
-
 export default class WaitingPage extends LightningElement {
-    @track players = [];
+    @track players;
     @api username;
-    //uid = "";
 
 
     connectedCallback() {
-        let u = this.username;
-        this.players.push({"id": "0","username":u}); //Need to fix this, included so first time username is added it shows in list
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-              // User is signed in.
-              console.log('user, ', user);
-              console.log(u);
-              db.collection("game").doc(user.uid).set({
-                  game: user.uid
-              })
-              db.collection("game").doc(user.uid).collection("players").add({
-                  username: u
-                });
-            } else {
-              // No user is signed in.
-              console.log('no user');
-            }
-          });
-
 
         new Promise((resolve) => {
-            resolve = (items) => {
-                this.players = items;
-            };
-            let user = firebase.auth().currentUser;
-            db.collection("game").doc(user.uid).collection("players")
-                .onSnapshot(function(querySnapshot) {
-                const items = [];
-                querySnapshot.forEach(function(doc) {
-                    items.push({id : doc.id, username : doc.data()});
-                })
-                resolve(items);
-            })
+            let game = firebase.auth().currentUser;
+            retrievePlayers(game.uid, resolve = (players) => {
+                console.log(players);
+                this.players = [];
+                for (let i = 0; i < players.length; i++) {
+                        this.players.push({'username': players[i], 'id': i});
+                }
+                    //this.dispatchEvent(new CustomEvent('players'));
+            });
         })
-        .catch(error => console.log('Error: ' + error)); 
+        .catch(error => console.log('Error retrieving list of players: ' + error));
     }
 
 }

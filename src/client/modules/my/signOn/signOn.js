@@ -1,10 +1,7 @@
 
 import { LightningElement, api } from 'lwc';
 import './signOn.css';
-import firebase from '../firebase/firebase.js';
-
-//const db = firebase.firestore();
-const USER_NOT_FOUND = "auth/user-not-found";
+import {signIn, createGame} from '../util/util.js';
 
 export default class SignOn extends LightningElement {
 
@@ -13,7 +10,7 @@ export default class SignOn extends LightningElement {
     emptyUsername = false;
     @api username;
 
-    signOn() {
+    getInputs() {
         const inputs = Array.from(this.template.querySelectorAll('input'))
             // Filter to only checked items
             .filter(element => element.value !== "")
@@ -21,22 +18,28 @@ export default class SignOn extends LightningElement {
             .map(element => ({key: element.classList[1], value: element.value}));
         
         if (inputs.length === 3) {
-            let username = inputs[0].value + '@gmail.com';
+            let gamename = inputs[0].value + '@gmail.com';
             let password = inputs[1].value;
             this.username = inputs[2].value;
             
-            firebase.auth().signInWithEmailAndPassword(username, password).catch(function(error) {
-                // Handle Errors here.
-                console.log(error);
-                if (error.code === USER_NOT_FOUND) {
-                    firebase.auth().createUserWithEmailAndPassword(username, password).catch(function(error) {
-                        console.log(error);
-                    });
-                }
-                // ...
-              });
-            this.dispatchEvent(new CustomEvent('signon'));
+            return [gamename, password, this.username];
+        } else {
+            console.log('Need to fill in all input fields');
+            return null;
         }
+    }
+
+    signOn() {   
+        let inputs = this.getInputs();
+        console.log(inputs);
+        signIn(inputs[0], inputs[1], inputs[2]);
+        this.dispatchEvent(new CustomEvent('signon'));
+    }
+
+    createGame() { 
+        let inputs = this.getInputs();
+        createGame(inputs[0], inputs[1], inputs[2]);
+        this.dispatchEvent(new CustomEvent('signon'));
     }
 
 }
