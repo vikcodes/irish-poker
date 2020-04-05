@@ -22,8 +22,8 @@ export default class App extends LightningElement {
 
         new Promise((resolve) => {
             let game = firebase.auth().currentUser;
-            console.log('in app');
-            retrievePlayers(game.uid, resolve = (players) => {
+            console.log('in app', retrieveGameId());
+            retrievePlayers(retrieveGameId(), resolve = (players) => {
                 //console.log('app players: ', players);
                 this.players = [];
                 for (let i = 0; i < players.length; i++) {
@@ -36,8 +36,8 @@ export default class App extends LightningElement {
 
         new Promise((resolve) => {
             let game = firebase.auth().currentUser;
-            console.log('in app game: ', game);
-                retrieveBeginGame(game.uid, resolve = (begin) => {
+            console.log('in app game: ', retrieveGameId());
+                retrieveBeginGame(retrieveGameId(), resolve = (begin) => {
                     console.log('Begin in callback: ', begin);
                     if (begin) {
                         this.isWaiting = false;
