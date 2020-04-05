@@ -8,7 +8,7 @@ export default class App extends LightningElement {
     isStart = false;
 
     @api username;
-    @track players;
+    @api players;
 
     connectedCallback() {
 

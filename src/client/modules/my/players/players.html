@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <template class="card-container" for:each={playerHand} for:item="card">
-            <my-card key={card.order} card={card} onturn={turnCard} style="padding: 1rem;"></my-card>
+            <my-card key={card.order} card={card} onturn={turnCard} username={playerName} style="padding: 1rem;"></my-card>
         </template>
     </div>
     <div>{playerName}</div>

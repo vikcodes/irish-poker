@@ -5,7 +5,7 @@
             <my-sign-on onsignon={handleSignOn}></my-sign-on>
         </div>
         <div class="container" if:true={isSignedOn}>
-            <my-deck></my-deck>
+            <my-deck players={players}></my-deck>
             <div class="container" if:true={isWaiting}>
                 <my-waiting-page username={username}></my-waiting-page>
             </div>

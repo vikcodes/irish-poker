@@ -55,7 +55,7 @@ const addPlayer = (username, gameId) => {
     db.collection("game").doc(gameId).set(playersMap, {merge: true});
 }
 
-//expecting cards to be a map of value -> {order, row, flipped}
+//expecting cards to be a map of value -> {order, flipped}
 const updatePlayerHand = (username, cards, gameId) => {
     let players = {};
     let playersMap = {};

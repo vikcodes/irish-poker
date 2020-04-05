@@ -8,6 +8,7 @@ export default class Deck extends LightningElement {
     @track deck = [];
     @api pyramid = [];
     @api playerHands = [];
+    @api players;
 
     newDeck() {
         this.deck = [];
@@ -32,23 +33,19 @@ export default class Deck extends LightningElement {
     setPlayersHands() {
         let numOfCards = 5;
         let gameid = retrieveGameId();
-        new Promise((resolve) => {
-            retrievePlayers(gameid, resolve = (players) => {
-                //console.log(players);
-                for (let i = 0; i < players.length; i++) {
-                    let hand = {};
-                    let index = i*5;
-                    for (let j = 0; j < numOfCards; j++) {
-                        hand[this.deck[index+j]] = {
-                            'order': j,
-                            'flipped': false
-                        };
-                    }
-                    updatePlayerHand(players[i], hand, gameid);
-                }
-            });
-        })
-        .catch(error => console.log('Error retrieving list of players to add cards: ' + error));
+        for (let i = 0; i < this.players.length; i++) {
+            let hand = {};
+            let index = i*5;
+            for (let j = 0; j < numOfCards; j++) {
+                hand[this.deck[index+j]] = {
+                    'order': j,
+                    'flipped': false
+                };
+            }
+            //console.log(this.players);
+            //console.log(this.players[i].username);
+            updatePlayerHand(this.players[i].username, hand, gameid);
+        }
 
     }
 

@@ -3,7 +3,7 @@
     <template class="row" for:each={rows} for:item="row">
         <div class="row" key={row.id}>
         <template class="card-container" for:each={row.row} for:item="card">
-            <my-card key={card.order} card={card} onturn={turnCard} style="padding: 1rem;"></my-card>
+            <my-card key={card.order} card={card} onturn={turnCard} username="pyramid" style="padding: 1rem;"></my-card>
         </template>
         </div>
     </template>
