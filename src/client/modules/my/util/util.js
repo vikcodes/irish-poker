@@ -87,7 +87,7 @@ const retrievePyramid = (gameId, callback) => {
         if (!doc.data().pyramidMap) {
           console.log('No such pyramid!');
         } else {
-          console.log('Pyramid data:', doc.data().pyramidMap);
+          //console.log('Pyramid data:', doc.data().pyramidMap);
           callback(doc.data().pyramidMap);
         }
       }, err => {
@@ -100,7 +100,7 @@ const retrievePlayerHand = (username, gameId, callback) => {
         if (!doc.data().playersMap[username]) {
           console.log('No such player hand!');
         } else {
-          console.log('Player data:', doc.data().playersMap[username]);
+          //console.log('Player data:', doc.data().playersMap[username]);
           callback(doc.data().playersMap[username]);
         }
       }, err => {
@@ -132,7 +132,7 @@ const retrieveBeginGame = (gameId, callback) => {
     if (!doc.exists) {
       console.log('No such game to begin!');
     } else {
-      console.log('Begin:', doc.data().begin);
+      //console.log('Begin:', doc.data().begin);
       callback(doc.data().begin);
     }
   }, err => {

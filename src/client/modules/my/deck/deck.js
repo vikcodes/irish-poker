@@ -70,6 +70,7 @@ export default class Deck extends LightningElement {
         //this.dispatchEvent(new CustomEvent('start'));
     }
 
+    //DOESNT WORK RIGHT NEED TO FIX LATER
     endGame() {
         firebase.auth().signOut().then(function() {
             // Sign-out successful.
