@@ -64,6 +64,7 @@
         "serve": "run-p serve:client serve:api",
         "serve:api": "node src/server/api.js",
         "serve:client": "node scripts/server.js",
+        "start": "run-p serve:client serve:api",
         "test:unit": "lwc-services test:unit",
         "test:unit:coverage": "lwc-services test:unit --coverage",
         "test:unit:debug": "lwc-services test:unit --debug",
