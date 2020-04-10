@@ -2,7 +2,7 @@
 import { LightningElement, track, api} from 'lwc';
 import './deck.css';
 import firebase from '../firebase/firebase.js';
-import {updatePyramid, retrieveGameId, retrievePlayers, updatePlayerHand, beginGame} from '../util/util.js';
+import {updatePyramid, updatePlayerHand, beginGame} from '../util/util.js';
 
 export default class Deck extends LightningElement {
     @track deck = [];
@@ -32,7 +32,6 @@ export default class Deck extends LightningElement {
 
     setPlayersHands() {
         let numOfCards = 5;
-        let gameid = retrieveGameId();
         for (let i = 0; i < this.players.length; i++) {
             let hand = {};
             let index = i*5;
@@ -44,7 +43,7 @@ export default class Deck extends LightningElement {
             }
             //console.log(this.players);
             //console.log(this.players[i].username);
-            updatePlayerHand(this.players[i].username, hand, gameid);
+            updatePlayerHand(this.players[i].username, hand);
         }
 
     }
@@ -62,10 +61,10 @@ export default class Deck extends LightningElement {
                 };
             }
         }
-        updatePyramid(pyramidMap, retrieveGameId());
+        updatePyramid(pyramidMap);
         this.setPlayersHands();
             
-        beginGame(retrieveGameId());
+        beginGame();
 
         //this.dispatchEvent(new CustomEvent('start'));
     }

@@ -10,9 +10,9 @@
                 <my-waiting-page username={username}></my-waiting-page>
             </div>
             <my-pyramid  if:true={isStart}></my-pyramid>
-            <div if:true={isStart} class="players">
+            <div if:true={isStart} class="players slds-grid slds-wrap">
                 <template if:true={players} class="player-container" for:each={players} for:item="player">
-                    <my-players key={player.id} player-name={player.username}></my-players>
+                    <my-players key={player.id} player-name={player.username} class="slds-col slds-size_5-of-12"></my-players>
                 </template>
             </div>
         </div>

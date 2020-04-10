@@ -12,8 +12,7 @@ export default class WaitingPage extends LightningElement {
     connectedCallback() {
 
         new Promise((resolve) => {
-            let game = firebase.auth().currentUser;
-            retrievePlayers(game.uid, resolve = (players) => {
+            retrievePlayers(resolve = (players) => {
                 console.log(players);
                 this.players = [];
                 for (let i = 0; i < players.length; i++) {

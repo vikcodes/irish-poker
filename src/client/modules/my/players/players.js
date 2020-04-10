@@ -1,8 +1,7 @@
 
 import { LightningElement, api, track } from 'lwc';
 import './players.css';
-import firebase from '../firebase/firebase.js';
-import {retrievePlayerHand, retrieveGameId} from '../util/util.js';
+import {retrievePlayerHand} from '../util/util.js';
 
 export default class Players extends LightningElement {
     @track playerHand = [];
@@ -12,7 +11,7 @@ export default class Players extends LightningElement {
 
     connectedCallback() {
         new Promise((resolve) => {
-            retrievePlayerHand(this.playerName, retrieveGameId(), resolve = (hand) => {
+            retrievePlayerHand(this.playerName, resolve = (hand) => {
                 //console.log('Hand: ', hand);
                 this.playerHand = [];
                 var match = document.cookie.match(new RegExp('(^| )' + 'username' + '=([^;]+)')); 
