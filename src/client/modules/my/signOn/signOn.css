@@ -1,1 +1,8 @@
 /* Styles here */
+.slds-form-element {
+    padding-bottom: 0.5rem;
+}
+
+.slds-form-element__label {
+    font-size: 1rem !important;
+}

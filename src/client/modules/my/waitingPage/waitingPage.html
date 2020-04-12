@@ -1,7 +1,9 @@
 <template>
     <div class="center">
+        <h2 class="slds-text-heading_medium">Game ID: {gameId}</h2>
+        <br></br>
         <div class="row">
-            Current Players: 
+            Current Players [{playerCount}/8]: 
             <template if:true={players} class="player-container" for:each={players} for:item="player">
                 <div key={player.id} style="padding: 1rem;"> {player.username}</div>
             </template>

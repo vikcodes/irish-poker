@@ -1,25 +1,235 @@
 /* Styles here */
 .card {
-    height: 5rem;
-    width: 5rem;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.8s;
-  }
+  height: 6.1rem;
+  width: 4.5rem;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
 
 .card .side {
-    height: 5rem;
-    width: 5rem;
-    backface-visibility: hidden;
-    position: absolute;
-    overflow: hidden;
-    border: solid darkgray;
+  height: 6.1rem;
+  width: 4.3rem;
+  backface-visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  background-image: url(https://cdn.shopify.com/s/files/1/0200/7616/products/playing-cards-bicycle-rider-back-2_1024x1024.png?v=1535755695);
+  background-size:contain;
 
-  }
+}
 
-  .card .back {
-    background: #eaeaed;
-    color: #0087cc;
-    text-align: center;
-    transform: rotateY(180deg);
-  }
+.card .back {
+  width: 4.5rem !important;
+  background: #eaeaed;
+  color: #0087cc;
+  text-align: center;
+  transform: rotateY(180deg);
+}
+
+.ace_clubs {
+  background: url(../../../resources/playing-cards.png) -2px -1px !important;
+ }
+ 
+ .two_clubs {
+  background: url(../../../resources/playing-cards.png) -75px -1px !important;
+ }
+ 
+ .three_clubs {
+  background: url(../../../resources/playing-cards.png) -148px -1px !important;
+ }
+ 
+ .four_clubs {
+  background: url(../../../resources/playing-cards.png) -220px -1px !important;
+ }
+ 
+ .five_clubs {
+  background: url(../../../resources/playing-cards.png) -294px -1px !important;
+ }
+ 
+ .six_clubs {
+  background: url(../../../resources/playing-cards.png) -366px -1px !important;
+ }
+ 
+ .seven_clubs {
+  background: url(../../../resources/playing-cards.png) -440px -1px !important;
+ }
+ 
+ .eight_clubs {
+  background: url(../../../resources/playing-cards.png) -512px -1px !important;
+ }
+ 
+ .nine_clubs {
+  background: url(../../../resources/playing-cards.png) -586px -1px !important;
+ }
+ 
+ .ten_clubs {
+  background: url(../../../resources/playing-cards.png) -658px -1px !important;
+ }
+ 
+ .jack_clubs {
+  background: url(../../../resources/playing-cards.png) -732px -1px !important;
+ }
+ 
+ .queen_clubs {
+  background: url(../../../resources/playing-cards.png) -804px -1px !important;
+ }
+ 
+ .king_clubs {
+  background: url(../../../resources/playing-cards.png) -878px -1px !important;
+ }
+ 
+ .ace_hearts {
+  background: url(../../../resources/playing-cards.png) -2px -99px !important;
+ }
+ 
+ .two_hearts {
+  background: url(../../../resources/playing-cards.png) -75px -99px !important;
+ }
+ 
+ .three_hearts {
+  background: url(../../../resources/playing-cards.png) -148px -99px !important;
+ }
+ 
+ .four_hearts {
+  background: url(../../../resources/playing-cards.png) -220px -99px !important;
+ }
+ 
+ .five_hearts {
+  background: url(../../../resources/playing-cards.png) -294px -99px !important;
+ }
+ 
+ .six_hearts {
+  background: url(../../../resources/playing-cards.png) -366px -99px !important;
+ }
+ 
+ .seven_hearts {
+  background: url(../../../resources/playing-cards.png) -440px -99px !important;
+ }
+ 
+ .eight_hearts {
+  background: url(../../../resources/playing-cards.png) -512px -99px !important;
+ }
+ 
+ .nine_hearts {
+  background: url(../../../resources/playing-cards.png) -586px -99px !important;
+ }
+ 
+ .ten_hearts {
+  background: url(../../../resources/playing-cards.png) -658px -99px !important;
+ }
+ 
+ .jack_hearts {
+  background: url(../../../resources/playing-cards.png) -732px -99px !important;
+ }
+ 
+ .queen_hearts {
+  background: url(../../../resources/playing-cards.png) -804px -99px !important;
+ }
+ 
+ .king_hearts {
+  background: url(../../../resources/playing-cards.png) -878px -99px !important;
+ }
+ 
+ .ace_spades {
+  background: url(../../../resources/playing-cards.png) -2px -197px !important;
+ }
+ 
+ .two_spades {
+  background: url(../../../resources/playing-cards.png) -75px -197px !important;
+ }
+ 
+ .three_spades {
+  background: url(../../../resources/playing-cards.png) -148px -197px !important;
+ }
+ 
+ .four_spades {
+  background: url(../../../resources/playing-cards.png) -220px -197px !important;
+ }
+ 
+ .five_spades {
+  background: url(../../../resources/playing-cards.png) -294px -197px !important;
+ }
+ 
+ .six_spades {
+  background: url(../../../resources/playing-cards.png) -366px -197px !important;
+ }
+ 
+ .seven_spades {
+  background: url(../../../resources/playing-cards.png) -440px -197px !important;
+ }
+ 
+ .eight_spades {
+  background: url(../../../resources/playing-cards.png) -512px -197px !important;
+ }
+ 
+ .nine_spades {
+  background: url(../../../resources/playing-cards.png) -586px -197px !important;
+ }
+ 
+ .ten_spades {
+  background: url(../../../resources/playing-cards.png) -658px -197px !important;
+ }
+ 
+ .jack_spades {
+  background: url(../../../resources/playing-cards.png) -732px -197px !important;
+ }
+ 
+ .queen_spades {
+  background: url(../../../resources/playing-cards.png) -804px -197px !important;
+ }
+ 
+ .king_spades {
+  background: url(../../../resources/playing-cards.png) -878px -197px !important;
+ }
+ 
+ .ace_diamonds {
+  background: url(../../../resources/playing-cards.png) -2px -295px !important;
+ }
+ 
+ .two_diamonds {
+  background: url(../../../resources/playing-cards.png) -75px -295px !important;
+ }
+ 
+ .three_diamonds {
+  background: url(../../../resources/playing-cards.png) -148px -295px !important;
+ }
+ 
+ .four_diamonds {
+  background: url(../../../resources/playing-cards.png) -220px -295px !important;
+ }
+ 
+ .five_diamonds {
+  background: url(../../../resources/playing-cards.png) -294px -295px !important;
+ }
+ 
+ .six_diamonds {
+  background: url(../../../resources/playing-cards.png) -366px -295px !important;
+ }
+ 
+ .seven_diamonds {
+  background: url(../../../resources/playing-cards.png) -440px -295px !important;
+ }
+ 
+ .eight_diamonds {
+  background: url(../../../resources/playing-cards.png) -512px -295px !important;
+ }
+ 
+ .nine_diamonds {
+  background: url(../../../resources/playing-cards.png) -586px -295px !important;
+ }
+ 
+ .ten_diamonds {
+  background: url(../../../resources/playing-cards.png) -658px -295px !important;
+ }
+ 
+ .jack_diamonds {
+  background: url(../../../resources/playing-cards.png) -732px -295px !important;
+ }
+ 
+ .queen_diamonds {
+  background: url(../../../resources/playing-cards.png) -804px -295px !important;
+ }
+ 
+ .king_diamonds {
+  background: url(../../../resources/playing-cards.png) -878px -295px !important;
+ }

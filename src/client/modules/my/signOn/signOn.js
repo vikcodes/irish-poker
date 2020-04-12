@@ -8,6 +8,7 @@ export default class SignOn extends LightningElement {
     emptyRoomName = false;
     emptyPassword = false;
     emptyUsername = false;
+    shortPassword = false;
     @api username;
 
     getInputs() {
@@ -29,17 +30,28 @@ export default class SignOn extends LightningElement {
         }
     }
 
+    checkPassword(e) {
+        if (e.target.value.length < 6) {
+            this.emptyPassword = true;
+        } else {
+            this.emptyPassword = false;
+        }
+    }
+
     signOn() {   
         let inputs = this.getInputs();
-        console.log(inputs);
-        signIn(inputs[0], inputs[1], inputs[2]);
-        this.dispatchEvent(new CustomEvent('signon'));
+        if (inputs !== null) {
+            signIn(inputs[0], inputs[1], inputs[2]);
+            this.dispatchEvent(new CustomEvent('signon'));
+        }
     }
 
     createGame() { 
         let inputs = this.getInputs();
-        createGame(inputs[0], inputs[1], inputs[2]);
-        this.dispatchEvent(new CustomEvent('signon'));
+        if (inputs !== null) {
+            createGame(inputs[0], inputs[1], inputs[2]);
+            this.dispatchEvent(new CustomEvent('signon'));
+        }
     }
 
 }

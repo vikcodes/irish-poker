@@ -1,6 +1,6 @@
-import { LightningElement, api, track } from 'lwc';
-import {retrieveBeginGame, retrieveGameId, retrievePlayers} from '../util/util.js';
-import firebase from '../firebase/firebase.js';
+import { LightningElement, api} from 'lwc';
+import {retrieveBeginGame, retrievePlayers, resetGame} from '../util/util.js';
+
 export default class App extends LightningElement {
 
     isSignedOn = false;
@@ -9,6 +9,7 @@ export default class App extends LightningElement {
 
     @api username;
     @api players;
+    @api firstTime;
 
     connectedCallback() {
 
@@ -21,9 +22,7 @@ export default class App extends LightningElement {
         this.username = event.target.username;
 
         new Promise((resolve) => {
-            let game = firebase.auth().currentUser;
-            console.log('in app', retrieveGameId());
-            retrievePlayers(retrieveGameId(), resolve = (players) => {
+            retrievePlayers(resolve = (players) => {
                 //console.log('app players: ', players);
                 this.players = [];
                 for (let i = 0; i < players.length; i++) {
@@ -35,14 +34,11 @@ export default class App extends LightningElement {
         .catch(error => console.log('Error retrieving list of players: ' + error));
 
         new Promise((resolve) => {
-            let game = firebase.auth().currentUser;
-            console.log('in app game: ', retrieveGameId());
-                retrieveBeginGame(retrieveGameId(), resolve = (begin) => {
-                    console.log('Begin in callback: ', begin);
-                    if (begin) {
+                retrieveBeginGame(resolve = (data) => {
+                    console.log('Begin in callback: ', data.begin);
+                    if (data.begin) {
                         this.isWaiting = false;
                         this.isStart = true;
-
                     }
                         //this.dispatchEvent(new CustomEvent('players'));
                 });
@@ -51,5 +47,18 @@ export default class App extends LightningElement {
     }
 
 
+    handleNewGame(event) {
+        resetGame();
+        document.cookie = "first=" + true;
+        this.isWaiting = true;
+        this.isStart = false;
+        this.firstTime = true;
+    }
+
+    handleLogOut(event) {
+        this.isSignedOn = false;
+        this.isWaiting = false;
+        this.isStart = false;
+    }
 
 }

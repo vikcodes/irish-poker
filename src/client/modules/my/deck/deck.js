@@ -2,13 +2,14 @@
 import { LightningElement, track, api} from 'lwc';
 import './deck.css';
 import firebase from '../firebase/firebase.js';
-import {updatePyramid, retrieveGameId, retrievePlayers, updatePlayerHand, beginGame} from '../util/util.js';
+import {updatePyramid, updatePlayerHand, beginGame} from '../util/util.js';
 
 export default class Deck extends LightningElement {
     @track deck = [];
     @api pyramid = [];
     @api playerHands = [];
     @api players;
+    isStart = false;
 
     newDeck() {
         this.deck = [];
@@ -32,7 +33,6 @@ export default class Deck extends LightningElement {
 
     setPlayersHands() {
         let numOfCards = 5;
-        let gameid = retrieveGameId();
         for (let i = 0; i < this.players.length; i++) {
             let hand = {};
             let index = i*5;
@@ -44,7 +44,7 @@ export default class Deck extends LightningElement {
             }
             //console.log(this.players);
             //console.log(this.players[i].username);
-            updatePlayerHand(this.players[i].username, hand, gameid);
+            updatePlayerHand(this.players[i].username, hand);
         }
 
     }
@@ -62,12 +62,22 @@ export default class Deck extends LightningElement {
                 };
             }
         }
-        updatePyramid(pyramidMap, retrieveGameId());
+        updatePyramid(pyramidMap);
         this.setPlayersHands();
-            
-        beginGame(retrieveGameId());
+        this.isStart = true;    
+        beginGame();
 
         //this.dispatchEvent(new CustomEvent('start'));
+    }
+
+    newGame() {
+        updatePyramid({});
+        for (let i = 0; i < this.players.length; i++) {
+            updatePlayerHand(this.players[i].username, {});
+        }
+        //this.createPyramid();
+        this.isStart = false;
+        this.dispatchEvent(new CustomEvent('newgame'));
     }
 
     //DOESNT WORK RIGHT NEED TO FIX LATER
@@ -79,6 +89,7 @@ export default class Deck extends LightningElement {
             // An error happened.
             console.log('no sign out',  error);
           });
+          this.dispatchEvent(new CustomEvent('logout'));
     }
 
 

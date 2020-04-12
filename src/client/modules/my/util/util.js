@@ -7,6 +7,8 @@ const db = firebase.firestore();
 //Each game is identified by a user in firebase, so the game uid is the game id
 const createGame = (gamename, password, username) => {
     document.cookie = "username=" + username;
+    //document.cookie = "first=" + true;
+    endGame();
     firebase.auth().createUserWithEmailAndPassword(gamename, password)
     .then(function(game) {
         db.collection("game").doc(game.user.uid).set({
@@ -22,6 +24,8 @@ const createGame = (gamename, password, username) => {
 
 const signIn = (gamename, password, username) => {
     document.cookie = "username=" + username;
+    //document.cookie = "first=" + true;
+    endGame();
     firebase.auth().signInWithEmailAndPassword(gamename, password)
     .then(function(game) {
       db.collection("game").doc(game.user.uid).set({
@@ -35,15 +39,15 @@ const signIn = (gamename, password, username) => {
     });
 }
 
-const retrieveGameId = () => {
-  let game = firebase.auth().currentUser;
-        if (game) {
-          // User is signed in.
-          //console.log('game, ', game);
-          return game.uid;
-        } else {
-            console.log('No game being played');
-        }
+const retrieveGameId = (callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      return callback(user);
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
 //Adds a player to the map of players in the game id doc, hand is set to an empty map
@@ -56,34 +60,58 @@ const addPlayer = (username, gameId) => {
 }
 
 //expecting cards to be a map of value -> {order, flipped}
-const updatePlayerHand = (username, cards, gameId) => {
-    let players = {};
-    let playersMap = {};
-    players[username] = cards;
-    playersMap['playersMap'] = players;
-    db.collection("game").doc(gameId).set(playersMap, {merge: true});
+const updatePlayerHand = (username, cards) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      let players = {};
+      let playersMap = {};
+      players[username] = cards;
+      playersMap['playersMap'] = players;
+      db.collection("game").doc(user.uid).set(playersMap, {merge: true});
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
 //expecting pyramid to be a map of value -> {order, row, flipped}
-const updatePyramid = (pyramid, gameId) => {
-    let pyramidMap = {};
-    pyramidMap['pyramidMap'] = pyramid;
-    db.collection("game").doc(gameId).set(pyramidMap, {merge: true});
+const updatePyramid = (pyramid) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      let pyramidMap = {};
+      pyramidMap['pyramidMap'] = pyramid;
+      pyramidMap['firstTime'] = false;
+      db.collection("game").doc(user.uid).set(pyramidMap, {merge: true});
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
 //Deletes the game by deleting the game id document
 //Game uid and firebase user still exists, though
-const resetGame = (gameId) => {
-    db.collection("game").doc(gameId).delete()
-    .then(function() {
-        console.log("Game successfully deleted!");
-    }).catch(function(error) {
-        console.error("Error removing game id: ", error);
-    });
+const resetGame = () => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is reset to waiting
+      let begin = {'begin': false};
+      db.collection("game").doc(user.uid).set(begin, {merge: true});
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
-const retrievePyramid = (gameId, callback) => {
-    db.collection("game").doc(gameId).onSnapshot(doc => {
+const retrievePyramid = (callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      db.collection("game").doc(user.uid).onSnapshot(doc => {
         if (!doc.data().pyramidMap) {
           console.log('No such pyramid!');
         } else {
@@ -93,10 +121,18 @@ const retrievePyramid = (gameId, callback) => {
       }, err => {
         console.log('Error getting game when retrieving pyramid', err);
       });
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
-const retrievePlayerHand = (username, gameId, callback) => {
-    db.collection("game").doc(gameId).onSnapshot(doc => {
+const retrievePlayerHand = (username, callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      db.collection("game").doc(user.uid).onSnapshot(doc => {
         if (!doc.data().playersMap[username]) {
           console.log('No such player hand!');
         } else {
@@ -106,11 +142,19 @@ const retrievePlayerHand = (username, gameId, callback) => {
       }, err => {
         console.log('Error getting game when retrieving player hand', err);
       });
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
 //returns array of player usernames
-const retrievePlayers = (gameId, callback) => {
-    db.collection("game").doc(gameId).onSnapshot(doc => {
+const retrievePlayers = (callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      db.collection("game").doc(user.uid).onSnapshot(doc => {
         if (!doc.exists) {
           console.log('No such players!');
         } else if (doc.data().playersMap){
@@ -120,24 +164,55 @@ const retrievePlayers = (gameId, callback) => {
       }, err => {
         console.log('Error getting game when retrieving players', err);
       });
-}
-
-const beginGame = (gameId) => {
-  let begin = {'begin': true};
-  db.collection("game").doc(gameId).set(begin, {merge: true});
-}
-
-const retrieveBeginGame = (gameId, callback) => {
-  db.collection("game").doc(gameId).onSnapshot(doc => {
-    if (!doc.exists) {
-      console.log('No such game to begin!');
     } else {
-      //console.log('Begin:', doc.data().begin);
-      callback(doc.data().begin);
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
     }
-  }, err => {
-    console.log('Error getting game when retrieving begin', err);
   });
+}
+
+const beginGame = () => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      let begin = {'begin': true, 'firstTime': true};
+      db.collection("game").doc(user.uid).set(begin, {merge: true});
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
+}
+
+const retrieveBeginGame = (callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // Game is signed in.
+      db.collection("game").doc(user.uid).onSnapshot(doc => {
+        if (!doc.exists) {
+          console.log('No such game to begin!');
+        } else {
+          //console.log('Begin:', doc.data().begin);
+          callback(doc.data());
+        }
+      }, err => {
+        console.log('Error getting game when retrieving begin', err);
+      });
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
+}
+
+const endGame = () => {
+  firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      console.log('Signed out');
+    }).catch(function(error) {
+      // An error happened.
+      console.log('no sign out',  error);
+    });
 }
 
 export {resetGame, createGame, addPlayer, updatePlayerHand, updatePyramid, retrievePyramid, retrievePlayerHand, retrievePlayers, signIn, retrieveGameId, beginGame, retrieveBeginGame};

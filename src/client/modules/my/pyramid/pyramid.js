@@ -1,8 +1,7 @@
 
 import { LightningElement, api} from 'lwc';
 import './pyramid.css';
-import firebase from '../firebase/firebase.js';
-import {retrievePyramid, retrieveGameId} from '../util/util.js';
+import {retrievePyramid} from '../util/util.js';
 export default class Pyramid extends LightningElement {
     @api rows
 
@@ -20,7 +19,7 @@ export default class Pyramid extends LightningElement {
             // }
 
             new Promise((resolve) => {
-                retrievePyramid(retrieveGameId(), resolve = (pyramid) => {
+                retrievePyramid(resolve = (pyramid) => {
                     console.log('Pyramid: ', pyramid);
                     this.rows = [{}, {}, {}, {}]; //need to change this later to be referenced from pyramid height
                     for (const value in pyramid) {
