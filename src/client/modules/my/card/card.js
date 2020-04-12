@@ -14,7 +14,6 @@ export default class Card extends LightningElement {
             this.template.querySelector('.back').style='transform: rotateY(0deg)';
             this.template.querySelector('.back').previousElementSibling.style='transform: rotateY(180deg)';
         } else { //front should be showing
-            console.log(this.template.querySelectorAll('div'));
             this.template.querySelector('.back').style='transform: rotateY(180deg)';
             this.template.querySelector('.back').previousElementSibling.style='transform: rotateY(0deg)';
         }
@@ -27,7 +26,7 @@ export default class Card extends LightningElement {
     turnCard(event) {
         let value = "";
         let flipped = false;
-        console.log(event.target);
+
         if (event.target.className.startsWith('side back')) { //if the click was on the back of the card
             value = event.target.getAttribute('val');
             // event.target.style='transform: rotateY(180deg)';

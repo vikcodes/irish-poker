@@ -1,5 +1,5 @@
 import { LightningElement, api} from 'lwc';
-import {retrieveBeginGame, retrievePlayers} from '../util/util.js';
+import {retrieveBeginGame, retrievePlayers, resetGame} from '../util/util.js';
 
 export default class App extends LightningElement {
 
@@ -9,6 +9,7 @@ export default class App extends LightningElement {
 
     @api username;
     @api players;
+    @api firstTime;
 
     connectedCallback() {
 
@@ -33,12 +34,11 @@ export default class App extends LightningElement {
         .catch(error => console.log('Error retrieving list of players: ' + error));
 
         new Promise((resolve) => {
-                retrieveBeginGame(resolve = (begin) => {
-                    console.log('Begin in callback: ', begin);
-                    if (begin) {
+                retrieveBeginGame(resolve = (data) => {
+                    console.log('Begin in callback: ', data.begin);
+                    if (data.begin) {
                         this.isWaiting = false;
                         this.isStart = true;
-
                     }
                         //this.dispatchEvent(new CustomEvent('players'));
                 });
@@ -47,5 +47,12 @@ export default class App extends LightningElement {
     }
 
 
+    handleNewGame(event) {
+        resetGame();
+        document.cookie = "first=" + true;
+        this.isWaiting = true;
+        this.isStart = false;
+        this.firstTime = true;
+    }
 
 }

@@ -9,6 +9,7 @@ export default class Deck extends LightningElement {
     @api pyramid = [];
     @api playerHands = [];
     @api players;
+    isStart = false;
 
     newDeck() {
         this.deck = [];
@@ -63,10 +64,20 @@ export default class Deck extends LightningElement {
         }
         updatePyramid(pyramidMap);
         this.setPlayersHands();
-            
+        this.isStart = true;    
         beginGame();
 
         //this.dispatchEvent(new CustomEvent('start'));
+    }
+
+    newGame() {
+        updatePyramid({});
+        for (let i = 0; i < this.players.length; i++) {
+            updatePlayerHand(this.players[i].username, {});
+        }
+        //this.createPyramid();
+        this.isStart = false;
+        this.dispatchEvent(new CustomEvent('newgame'));
     }
 
     //DOESNT WORK RIGHT NEED TO FIX LATER
