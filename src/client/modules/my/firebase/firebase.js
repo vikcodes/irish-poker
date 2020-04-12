@@ -3,7 +3,7 @@ import "@firebase/auth";
 import '@firebase/firestore';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD5KoKj46zCIVRMYFAAKq7A_3PupkJrlNE",
+    apiKey: "AIzaSyALFsV1osXfYxO8MEw6XzMGrWhYo7GN_Cw",
     authDomain: "irishpoker-2852e.firebaseapp.com",
     databaseURL: "https://irishpoker-2852e.firebaseio.com",
     projectId: "irishpoker-2852e",
