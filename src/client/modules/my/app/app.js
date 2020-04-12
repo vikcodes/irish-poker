@@ -55,4 +55,10 @@ export default class App extends LightningElement {
         this.firstTime = true;
     }
 
+    handleLogOut(event) {
+        this.isSignedOn = false;
+        this.isWaiting = false;
+        this.isStart = false;
+    }
+
 }

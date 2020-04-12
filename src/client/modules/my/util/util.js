@@ -39,15 +39,15 @@ const signIn = (gamename, password, username) => {
     });
 }
 
-const retrieveGameId = () => {
-  let game = firebase.auth().currentUser;
-        if (game) {
-          // User is signed in.
-          //console.log('game, ', game);
-          return game.uid;
-        } else {
-            console.log('No game being played');
-        }
+const retrieveGameId = (callback) => {
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      return callback(user);
+    } else {
+      // No user is signed in.
+      console.log('Game has not been signed in yet');
+    }
+  });
 }
 
 //Adds a player to the map of players in the game id doc, hand is set to an empty map

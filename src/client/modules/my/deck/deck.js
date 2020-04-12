@@ -89,6 +89,7 @@ export default class Deck extends LightningElement {
             // An error happened.
             console.log('no sign out',  error);
           });
+          this.dispatchEvent(new CustomEvent('logout'));
     }
 
 
